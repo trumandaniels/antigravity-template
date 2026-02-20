@@ -2,79 +2,71 @@
 
 ## 1. Meta-Information
 
-* **Skill Name:** Refactoring & Cleanup (Cognitive Load Reduction)
-* **Phase:** 8 / 12 (Optimization & Sustainability)
-* **Objective:** Enhance the internal structure of the verified code to maximize readability, maintainability, and performance without altering its external behavior.
-* **Prerequisites:** A passing, hardened test suite from `skill_test_verification.md` and the `Verified_Code_Payload`.
+* **Skill Name:** Refactoring & Cleanup (Structural Optimization)
+* **Phase:** 8 / 12 (Optimization)
+* **Objective:** Restructure the verified implementation to minimize cognitive load, enforce DRY (Don't Repeat Yourself) principles, and reduce cyclomatic complexity—all without altering the system's external behavior or invalidating the test suite.
+* **Prerequisites:** Successful completion of `skill_test_verification.md` (a robust, passing test suite that guarantees falsifiability).
 
 ## 2. Core Philosophy
 
-Refactoring is not about adding features; it is about paying down technical debt. An agentic coder must prioritize **Cognitive Earnestness**—making the code's intent so obvious that a junior engineer could debug it at 3 AM. We adhere to the **Red-Green-Refactor** mantra, where the "Green" (the tests) acts as an immovable guardrail. If a refactor causes a test to fail, the refactor is objectively wrong.
+In production-grade engineering, getting the code to work is only half the battle; the other half is ensuring the code can be maintained by others (or by an autonomous agent in a future context window) six months down the line. Refactoring is a strict discipline of semantics-preserving transformations. It is explicitly *not* the time to add new features or fix lingering bugs.
+
+For an agentic workflow, refactoring serves a dual purpose: it improves human readability, and it optimizes the token density of the codebase, ensuring that future prompts analyzing this file waste zero context on redundant logic, dead code, or monolithic functions.
 
 ## 3. Execution Protocol
 
-To optimize the implementation without regression, the agent must execute these operations:
+To execute a safe and effective refactoring pass, the agent must strictly adhere to the following sequence, leaning heavily on the test suite generated in Step 6 as a safety net.
 
-### Step 3.1: Code Smell Detection
+### Step 3.1: The Safety Net Check
 
-* **Action:** Scan the `Verified_Code_Payload` for architectural anti-patterns.
-* **Focus:** * **DRY (Don't Repeat Yourself):** Identify near-identical logic blocks that can be unified.
-* **Complexity:** Look for deeply nested conditionals (Arrow Anti-pattern) or "God Functions" that exceed 30 lines.
-* **Naming:** Identify variables with vague names (e.g., `data`, `temp`, `res`) and replace them with domain-specific nomenclature.
+* **Action:** Before touching a single line of code, the agent must verify that the test suite is currently in a "green" state.
+* **Focus:** Refactoring a broken system is a fatal error. If the tests do not pass, the agent must immediately halt and revert to Step 3 (Implementation). The tests represent the immutable contract of the system; refactoring is merely reorganizing the internals of that contract.
 
+### Step 3.2: Cyclomatic Complexity Reduction (Extract Method)
 
+* **Action:** Scan the implementation for functions that violate the Single Responsibility Principle (SRP) or contain deeply nested conditionals (`if` statements inside `for` loops inside `try` blocks).
+* **Focus:** Isolate and extract independent logic blocks into private helper methods. For instance, if a module acting as a code explainer contains a monolithic function that both traverses an Abstract Syntax Tree (AST) to analyze snippets and subsequently formats the markdown output, the agent must split these into two pure, isolated functions: one for analysis, one for presentation.
 
-### Step 3.2: Behavior-Preserving Transformations
+### Step 3.3: DRY Enforcement & Deduplication
 
-* **Action:** Apply surgical improvements to the code.
-* **Mechanism:**
-* **Extraction:** Move complex logic into small, private helper functions with descriptive names.
-* **Simplification:** Replace complex `if/else` chains with guard clauses and early returns.
-* **Standardization:** Ensure the code uses the latest idiomatic features of the language (e.g., Python list comprehensions, f-strings, or `contextlib`).
+* **Action:** Identify repeated patterns, duplicated strings, or identical logic scattered across multiple branches.
+* **Focus:** Consolidate repeated logic into centralized utilities, loops, or shared constants. If the same validation check is performed at the top of three different methods, extract it into a decorator or a dedicated validation function.
 
+### Step 3.4: Semantic Naming & Type Hinting Precision
 
-* **Validation:** The agent must not change method signatures or public API contracts established in Step 2.
+* **Action:** Audit all variables, classes, and function signatures.
+* **Focus:** Replace generic names (`data`, `temp`, `processor`, `result`) with highly specific, domain-accurate identifiers (`ast_node_mapping`, `fallback_token_limit`, `snippet_parser`). Ensure strict Python type hints (e.g., `Dict[str, Any]` rather than just `dict`) are correctly applied to all inputs and outputs to self-document the data structures.
 
-### Step 3.3: Performance Optimization (Pragmatic)
+### Step 3.5: Dead Code Elimination
 
-* **Action:** Identify "low-hanging fruit" performance bottlenecks.
-* **Focus:** * Reduce O(n²) operations to O(n) where possible (e.g., using sets for lookups instead of lists).
-* Eliminate redundant API calls or database queries identified during implementation.
-* Ensure resource handles (files, sockets) are managed via context managers to prevent leaks.
+* **Action:** Remove any unused imports, commented-out legacy code, unreachable `else` blocks, or redundant variables that were created during the initial "trial and error" phase of Step 3.
+* **Focus:** The codebase must be stripped down to its essential logic. Every line of code is a liability that must be read, parsed, and maintained; if it is not executed, it must be deleted.
 
+### Step 3.6: The Continuous Verification Loop
 
-
-### Step 3.4: Dead Code & Artifact Removal
-
-* **Action:** Purge the codebase of "scaffolding."
-* **Focus:** Remove all `print()` statements used for debugging, commented-out code blocks, and unused imports that may have survived Step 4.
-* **Validation:** Ensure that "TODO" comments are either addressed or converted into formal issue tracking requirements.
-
-### Step 3.5: Recursive Verification
-
-* **Action:** Re-execute the `Verified_Test_Suite` from Step 7 after every significant structural change.
-* **Validation:** A refactor is only successful if the mutation-tested suite remains 100% green. If a test fails, the agent must `git checkout` (or revert state) to the last known good version and attempt a smaller, more atomic transformation.
+* **Action:** After *every* isolated structural change (e.g., renaming a variable, extracting a function), the agent must instantly re-run the test suite.
+* **Focus:** Refactoring is a micro-iterative process. If a change turns the test suite "red," the agent must immediately undo the last atomic action. Never pile multiple refactoring changes on top of a failing test suite.
 
 ## 4. Required Output Artifacts
 
-Upon completing this skill, the agent must generate an `Optimized_Code_Payload` to be passed to Step 9 (Regression Check). This payload MUST include:
+Upon completing this skill, the agent must generate a `Refactored_State_Payload` to be passed to Step 9 (Regression Check). This payload MUST include:
 
-1. **The Refactored Source Code:** Clean, idiomatic, and highly readable logic.
-2. **Refactoring Log:** A concise summary of changes (e.g., "Extracted AST parsing to `_parse_node` helper; replaced nested loops with set intersection").
-3. **Green-State Confirmation:** A timestamped log showing the tests still pass.
+1. **The Optimized Source Code:** The final, cleaned implementation files.
+2. **Refactoring Diff:** A clean unified diff showing the exact structural changes made.
+3. **Green Test Trace:** The standard output proving that the test suite still passes at 100% after all structural transformations.
 
 ## 5. Failure Modes & Fallback Strategies
 
-* **Feature Creep disguised as Refactoring:**
-* *Trigger:* The agent adds a "convenience" parameter or a new error case during refactoring.
-* *Fallback:* Reject the change. Refactoring is strictly a 1:1 behavioral mapping. Any new features must be sent back to Step 2 (Design).
+* **Feature Creep / Scope Bloat:**
+* *Trigger:* While refactoring, the agent notices an edge case that wasn't handled and attempts to add new logic to fix it, altering the system's behavior.
+* *Fallback:* Strict behavioral enforcement. If the test suite fails because the agent *changed* the expected output (rather than preserving it), the agent must revert the code, document the missed edge case as a separate issue, and maintain the current verified contract.
 
 
-* **The "Clever Code" Trap:**
-* *Trigger:* The agent replaces readable logic with a complex, one-liner lambda or a cryptic regex to "save space."
-* *Fallback:* Enforce a **Readability Score**. If the new code increases the cognitive load (measured by nesting depth or variable naming clarity), revert the change.
+* **"Spaghetti" Abstraction (Over-Refactoring):**
+* *Trigger:* The agent breaks down a simple 15-line function into five separate 3-line functions scattered across multiple files, drastically increasing cognitive load and making the execution path impossible to follow.
+* *Fallback:* Implement a fragmentation threshold. Refactoring should clarify, not obscure. If a function fits entirely on one screen and handles a single intuitive concept, the agent should leave it intact.
 
 
-* **Breaking the Test Guardrail:**
-* *Trigger:* The agent modifies a private method that a test was unfortunately "reaching into" to mock.
-* *Fallback:* The agent must either update the test fixture to match the new internal structure or—preferably—refactor the test to only use public interfaces, ensuring the refactor is truly decoupled from the test implementation.
+* **The Broken Contract (Regression Injection):**
+* *Trigger:* The agent alters a variable name or data structure that is implicitly expected by an external, un-mocked dependency, causing a silent failure that the isolated unit tests miss.
+* *Fallback:* This highlights a failure in Step 6's test coverage. The agent must revert the change, write a new failing test that captures this previously hidden contract, and only then re-attempt the refactor.

@@ -2,72 +2,66 @@
 
 ## 1. Meta-Information
 
-* **Skill Name:** Test Verification (Mutation & Quality Audit)
+* **Skill Name:** Test Verification (Falsifiability & Stress Analysis)
 * **Phase:** 7 / 12 (Validation & Defense)
-* **Objective:** Execute the newly generated test suite against the implementation. Prove that the tests pass under normal conditions, achieve the required coverage, and—most importantly—fail when intentional faults are injected into the source code.
-* **Prerequisites:** Successful completion of `skill_test_generation.md`, resulting in an executable `Test_Suite_Payload`. Access to the `Verified_Code_Payload` (Step 5) and an isolated execution environment.
+* **Objective:** Execute, audit, and rigorously challenge the generated test suite to ensure it effectively guarantees the system contracts, provides meaningful coverage, and—most importantly—is actually capable of failing when the underlying implementation is compromised.
+* **Prerequisites:** Successful completion of `skill_implementation.md` (the target code) and `skill_test_generation.md` (the executable test suite).
 
 ## 2. Core Philosophy
 
-A test suite is a structural contract. If you can alter the logic of the implementation without breaking the contract, the contract is void. This phase strictly enforces **Mutation Testing** principles. The agent must assume its own tests are flawed tautologies until proven otherwise. Code coverage tells you what lines were executed; mutation testing tells you if those lines were actually evaluated.
+In rigorous software engineering, a test suite that has never been observed to fail is fundamentally untrustworthy. Tests are not merely checklists; they are tripwires. The core philosophy of this phase relies on the scientific principle of falsifiability. If a test passes, we must prove that its passing is a direct result of correct implementation logic, not an artifact of tautological assertions, excessive mocking, or suppressed exceptions. Furthermore, at scale, non-deterministic "flaky" tests degrade pipeline trust and developer velocity. Therefore, this agentic skill treats the test suite with deep skepticism, subjecting it to mutation analysis, coverage audits, and environmental stress before certifying the code for production integration.
 
 ## 3. Execution Protocol
 
-To definitively prove the validity of the test suite, the agent must execute the following sequential operations:
+To certify the test suite as a valid defensive boundary, the agent must execute the following strictly ordered operations:
 
-### Step 3.1: The Baseline Run (The Green Phase)
+### Step 3.1: The Baseline Execution (The Green Phase)
 
-* **Action:** Execute the `Test_Suite_Payload` against the unmodified `Verified_Code_Payload` using the standard test runner (e.g., `pytest`).
-* **Validation:** All tests must pass. If a test fails on the unmodified code, the agent must halt, analyze the traceback, and determine if the implementation (Step 3) or the test (Step 6) is flawed. Do not proceed until the baseline is green.
+* **Action:** Execute the test suite in a clean, isolated environment against the current implementation.
+* **Focus:** Verify that all unit and integration tests pass cleanly on the first run. Any failure at this stage indicates either a flawed implementation (Step 3) or an overly rigid test generation (Step 6). If the baseline fails, the agent must halt and explicitly route the execution loop back to the appropriate prior step.
 
-### Step 3.2: Coverage & Branch Analysis
+### Step 3.2: Structural Coverage & Branch Audit
 
-* **Action:** Re-run the test suite with strict coverage tracking enabled (e.g., `pytest-cov`).
-* **Focus:** Verify that the primary execution paths, error handlers, and boundary conditions defined in the `Design_Blueprint` are demonstrably executed.
-* **Validation:** Enforce a hard coverage floor (e.g., 90% branch coverage). Reject the suite if critical logical nodes are bypassed.
+* **Action:** Execute the test suite wrapped in a coverage analysis tool (e.g., `coverage.py` or `pytest-cov`) to generate a quantitative execution map.
+* **Focus:** Do not rely solely on line coverage, which is a vanity metric. The agent must enforce *branch* and *condition* coverage. Every `if/else` block, `try/except` handler, and loop termination condition must be actively traversed by the test data.
+* *Requirement:* Ensure exception handlers defined during the design phase are explicitly triggered by the tests.
 
-### Step 3.3: Fault Injection (The Red Phase)
+### Step 3.3: Falsifiability via Mutation Testing (The Red Phase)
 
-* **Action:** Systematically inject "mutants" (intentional bugs) into the `Verified_Code_Payload`.
-* **Mechanism:** The agent must perform localized AST manipulations or text-level substitutions. Examples include:
-* Swapping mathematical operators (e.g., changing `+` to `-`).
-* Inverting conditionals (e.g., changing `if x == y:` to `if x != y:`).
-* Nullifying return values (e.g., replacing `return data` with `return None`).
+* **Action:** Systematically inject localized, intentional regressions into the implementation source code (mutations) and re-run the test suite.
+* **Focus:** The agent must verify that breaking the code *breaks the test*. For example, when validating a test suite for a code explainer that relies on parsing an Abstract Syntax Tree (AST), changing a `Return` node to a `Pass` node in the source logic must trigger an immediate assertion failure in the test suite.
+* *Mechanism:* Invert boolean conditionals (`==` to `!=`), increment/decrement integer boundaries, or comment out variable assignments. If the test suite remains "green" despite these mutations, the tests are dead code and must be rewritten.
 
+### Step 3.4: Determinism & Flakiness Validation
 
-* **Execution:** Run the test suite against the mutated code.
+* **Action:** Stress-test the suite to guarantee hermeticity and strict determinism.
+* **Focus:** Run the test suite multiple times (e.g., 10x) using randomized execution orders (via tools like `pytest-randomly`). Verify that no test relies on the residual state of a previous test. Ensure all mocks instantiated in Step 6 are properly tearing down, and no localized I/O operations are leaking across the test runner boundary.
 
-### Step 3.4: Mutant Eradication Audit
+### Step 3.5: The Assertion Quality Audit
 
-* **Action:** Analyze the test results from the Red Phase.
-* **Focus:** At least one test *must* fail for every injected mutant. If the mutated code passes the test suite, the tests are identified as "surviving mutants" and flagged as invalid, tautological, or improperly mocked.
-* **Validation:** The agent must isolate tests that allowed mutants to survive and immediately rewrite them to enforce stricter structural assertions.
-
-### Step 3.5: State Reversion & Finalization
-
-* **Action:** Purge all mutated code from the environment. Restore the `Verified_Code_Payload` to its pristine, baseline state.
-* **Validation:** Run the test suite one final time to guarantee the environment is stable and no residual faults remain.
+* **Action:** Perform a static scan of the test source code to evaluate the density and specificity of the assertions.
+* **Focus:** Reject tests that execute complex logic but only assert trivial outcomes (e.g., `assert result is not None`). Ensure the assertions are checking precise structural contracts, state mutations, and accurate data transformations.
 
 ## 4. Required Output Artifacts
 
-Upon completing this skill, the agent must generate a `Verified_Test_Suite` to be passed to Step 8 (Refactoring & Cleanup). This payload MUST include:
+Upon completing this skill, the agent must generate a `Verification_Certificate_Payload` to be passed to Step 8 (Refactoring & Cleanup). This payload MUST include:
 
-1. **The Hardened Test Code:** The finalized `test_*.py` files that successfully killed all injected mutants.
-2. **Coverage Report:** A definitive log proving the required branch and line coverage was achieved.
-3. **Mutation Score:** A brief audit log demonstrating which faults were injected and which specific tests caught them.
+1. **Execution Trace Log:** The raw standard output of the baseline test run, proving a 100% pass rate.
+2. **Coverage Matrix:** A detailed mapping of branch and line coverage, specifically highlighting any edge cases that were intentionally excluded with justification.
+3. **Mutation Score / Falsifiability Proof:** A log documenting at least one intentional mutation introduced to the core logic, and the corresponding stack trace of the test suite correctly catching the error and failing.
 
 ## 5. Failure Modes & Fallback Strategies
 
-* **The Invincible Test (Tautology Trap):**
-* *Trigger:* A mutant is injected (e.g., the function now returns an empty dict instead of populated data), but the test still passes because it only asserts that `type(response) == dict` or merely checks that a mock was called.
-* *Fallback:* The agent must discard the failing test. It must review the `Design_Blueprint` to understand the exact expected data shape and rewrite the test using deep, recursive object comparisons (e.g., validating specific keys and values).
+* **The "Evergreen" Test (False Negative Failsafe):**
+* *Trigger:* During the mutation phase (Step 3.3), the agent deliberately breaks the implementation logic, but the test suite continues to pass.
+* *Fallback:* The agent must flag the specific test as "Tautological." Execution must revert to Step 6 (`skill_test_generation.md`) with strict instructions to rewrite the test's `Assert` phase to explicitly check the mutated output variable rather than a mocked or hardcoded constant.
 
 
-* **Flaky Tests (Non-Deterministic Failures):**
-* *Trigger:* A test passes on the baseline run, fails, and then passes again without any code changes. This is common when LLMs use `datetime.now()` or uncontrolled random seeds.
-* *Fallback:* Flag the test as non-deterministic. The agent must inject a mock for time, seed the random number generator, or rewrite the test to be entirely pure and hermetic.
+* **The "Tourist" Test (Execution Without Verification):**
+* *Trigger:* The coverage audit (Step 3.2) shows 100% line coverage, but the assertion audit (Step 3.5) reveals that the tests are simply calling functions without verifying the returned state or data structures.
+* *Fallback:* Mandate a minimum assertion-to-action ratio. The agent must inject strict type-checking assertions and boundary-value validations into the existing test blocks before proceeding.
 
 
-* **Coverage Blind Spots:**
-* *Trigger:* The coverage report reveals that an entire `except` block or edge-case branch is never hit by the test suite.
-* *Fallback:* The agent must pause verification, step back to Step 6 (Test Generation), and deliberately construct a malicious input specifically designed to trigger that exact branch before re-attempting Step 7.
+* **State Leakage / Flakiness (The Order Dependency):**
+* *Trigger:* Tests pass when run sequentially but fail when randomized in Step 3.4, indicating shared state or improper teardown of mocks.
+* *Fallback:* The agent must inject strict `setUp` and `tearDown` methods (or heavily scoped `pytest` fixtures) to force state resets. No test is permitted to write to a shared disk or global variable without an explicit, guaranteed cleanup block.
