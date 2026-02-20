@@ -1,4 +1,4 @@
-# `skill_documentation.md`
+# Documentation
 
 ## 1. Meta-Information
 

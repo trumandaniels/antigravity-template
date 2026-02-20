@@ -1,4 +1,4 @@
-# `skill_state_checkpoint.md`
+# State Checkpointing
 
 ## 1. Meta-Information
 

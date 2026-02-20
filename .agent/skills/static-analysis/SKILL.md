@@ -1,4 +1,4 @@
-# `skill_static_analysis.md`
+# Static Analysis
 
 ## 1. Meta-Information
 

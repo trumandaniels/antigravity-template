@@ -1,4 +1,4 @@
-# `skill_refactoring.md`
+# Refactoring
 
 ## 1. Meta-Information
 

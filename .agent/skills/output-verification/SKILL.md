@@ -1,4 +1,4 @@
-# `skill_output_verification.md`
+# Output Verification
 
 ## 1. Meta-Information
 

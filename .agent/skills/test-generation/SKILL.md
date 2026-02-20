@@ -1,4 +1,4 @@
-# `skill_test_generation.md`
+# Test Generation
 
 ## 1. Meta-Information
 

@@ -1,4 +1,4 @@
-# `skill_design_planning.md`
+# Design Planning
 
 ## 1. Meta-Information
 

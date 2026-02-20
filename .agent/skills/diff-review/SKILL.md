@@ -1,4 +1,4 @@
-# `skill_diff_review.md`
+# Diff Review
 
 ## 1. Meta-Information
 

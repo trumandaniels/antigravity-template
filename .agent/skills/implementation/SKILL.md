@@ -1,4 +1,4 @@
-# `skill_implementation.md`
+# Implementation
 
 ## 1. Meta-Information
 
