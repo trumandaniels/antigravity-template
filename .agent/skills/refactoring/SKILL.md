@@ -1,3 +1,9 @@
+---
+name: refactoring
+description: Optimizes code for readability and DRY principles without altering core behavior.
+tags: [refactoring, optimization, clean-code]
+---
+
 # Refactoring
 
 ## 1. Meta-Information

@@ -1,3 +1,9 @@
+---
+name: static-analysis
+description: Runs configured linters and strict type checkers to catch syntax and stylistic violations.
+tags: [linting, type-checking, quality-assurance]
+---
+
 # Static Analysis
 
 ## 1. Meta-Information

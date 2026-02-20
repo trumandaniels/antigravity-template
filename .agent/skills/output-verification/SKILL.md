@@ -1,3 +1,9 @@
+---
+name: output-verification
+description: Isolates new logic to verify compilation and execution without fatal runtime errors.
+tags: [testing, compilation, sanity-check]
+---
+
 # Output Verification
 
 ## 1. Meta-Information

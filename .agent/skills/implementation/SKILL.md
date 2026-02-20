@@ -1,3 +1,9 @@
+---
+name: implementation
+description: Translates approved designs into clean, idiomatic code with straightforward logic.
+tags: [coding, python, implementation]
+---
+
 # Implementation
 
 ## 1. Meta-Information

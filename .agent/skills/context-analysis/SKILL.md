@@ -1,3 +1,9 @@
+---
+name: context-analysis
+description: Establishes a mental model of the target environment, identifying dependencies and module architecture.
+tags: [architecture, planning, dependencies, agentic-workflow]
+---
+
 # Context Analysis
 
 ## 1. Meta-Information

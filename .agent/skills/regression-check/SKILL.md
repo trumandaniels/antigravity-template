@@ -1,3 +1,9 @@
+---
+name: regression-check
+description: Executes the repository's full test suite to ensure new integrations do not break existing functionality.
+tags: [testing, regression, ci-cd]
+---
+
 # `skill_regression_check.md`
 
 ## 1. Meta-Information

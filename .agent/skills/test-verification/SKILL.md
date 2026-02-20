@@ -1,3 +1,9 @@
+---
+name: test-verification
+description: Executes tests against the implementation to ensure they accurately catch broken logic.
+tags: [testing, validation, qa]
+---
+
 # Test Verification
 
 ## 1. Meta-Information

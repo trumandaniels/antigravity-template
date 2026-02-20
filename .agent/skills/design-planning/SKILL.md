@@ -1,3 +1,9 @@
+---
+name: design-planning
+description: Drafts architectural blueprints, data structures, and algorithms prior to implementation.
+tags: [design, architecture, algorithms]
+---
+
 # Design Planning
 
 ## 1. Meta-Information
