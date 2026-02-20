@@ -11,7 +11,7 @@ tags: [documentation, technical-writing, comments]
 * **Skill Name:** Documentation Update (Contextual Preservation & Intent Mapping)
 * **Phase:** 11 / 12 (Knowledge Transfer)
 * **Objective:** Codify the *intent*, *context*, and *architectural decisions* behind the verified code changes into long-lasting artifacts (docstrings, inline comments, and READMEs) to ensure seamless maintainability for both human engineers and future autonomous agents.
-* **Prerequisites:** Successful completion of `skill_diff_review.md` (the code has been strictly audited, secured, and approved for integration). Read access to the finalized codebase and the original `Design_Blueprint`.
+* **Prerequisites:** Successful completion of skill `diff-review` step (the code has been strictly audited, secured, and approved for integration). Read access to the finalized codebase and the original `Design_Blueprint`.
 
 ## 2. Core Philosophy
 

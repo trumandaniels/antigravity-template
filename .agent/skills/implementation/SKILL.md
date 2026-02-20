@@ -11,7 +11,7 @@ tags: [coding, python, implementation]
 * **Skill Name:** Implementation
 * **Phase:** 3 / 12 (Construction & Instantiation)
 * **Objective:** Translate the strict `Design_Blueprint` into functional, idiomatic, and production-ready source code. The focus is on clean execution, single-responsibility functions, and immediate defensibility against runtime faults.
-* **Prerequisites:** Successful completion of `skill_design_planning.md`, resulting in a finalized `Design_Blueprint` and Interface Contract.
+* **Prerequisites:** Successful completion of skill `design-planning` step, resulting in a finalized `Design_Blueprint` and Interface Contract.
 
 ## 2. Core Philosophy
 

@@ -11,7 +11,7 @@ tags: [linting, type-checking, quality-assurance]
 * **Skill Name:** Static Analysis & Type Checking
 * **Phase:** 4 / 12 (Validation & Remediation)
 * **Objective:** Subject the raw `Code_Payload` to deterministic, automated scrutiny using strict linters and type checkers. Catch and automatically remediate syntax errors, type mismatches, and structural violations *before* any runtime execution is attempted.
-* **Prerequisites:** Successful completion of `skill_implementation.md`, resulting in a complete `Code_Payload`. Access to configured environment tooling (e.g., `mypy`, `ruff`, `pylint`, or their language equivalents).
+* **Prerequisites:** Successful completion of skill `implementation` step, resulting in a complete `Code_Payload`. Access to configured environment tooling (e.g., `mypy`, `ruff`, `pylint`, or their language equivalents).
 
 ## 2. Core Philosophy
 

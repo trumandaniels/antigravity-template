@@ -11,7 +11,7 @@ tags: [testing, regression, ci-cd]
 * **Skill Name:** Regression Check (Systemic Integration & Blast Radius Mitigation)
 * **Phase:** 9 / 12 (Systemic Validation)
 * **Objective:** Execute the entire repository's global test suite to guarantee that localized implementations, test generations, and structural refactoring have not inadvertently violated existing contracts or degraded unrelated functionalities elsewhere in the system.
-* **Prerequisites:** Successful completion of `skill_refactoring.md` (optimized, locally verified code) and access to the complete, repository-wide test suite and continuous integration (CI) configuration.
+* **Prerequisites:** Successful completion of skill `refactoring` step (optimized, locally verified code) and access to the complete, repository-wide test suite and continuous integration (CI) configuration.
 
 ## 2. Core Philosophy
 
@@ -55,7 +55,7 @@ Upon completing this skill, the agent must generate a `Regression_Clearance_Payl
 
 * **Spooky Action at a Distance (The Global State Mutation):**
 * *Trigger:* The agent modified a seemingly isolated pure function, but the global test suite fails in a completely unrelated directory because both modules secretly relied on a shared mutable global state or singleton.
-* *Fallback:* The agent must halt, trace the stack of the failing global test, and identify the shared dependency. Execution must revert to Step 3 (`skill_implementation.md`) to decouple the localized code from the global state, enforcing true hermetic execution.
+* *Fallback:* The agent must halt, trace the stack of the failing global test, and identify the shared dependency. Execution must revert to Step 3 (skill `implementation`) to decouple the localized code from the global state, enforcing true hermetic execution.
 
 
 * **The Dependency Drift (Version Conflict):**

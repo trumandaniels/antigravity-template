@@ -11,7 +11,7 @@ tags: [design, architecture, algorithms]
 * **Skill Name:** Design & Planning
 * **Phase:** 2 / 12 (Architecture & Blueprinting)
 * **Objective:** Translate the raw constraints from the Context Analysis into a deterministic architectural blueprint. Define strict data interfaces, algorithmic pathways, and error-handling mechanisms before writing any executable logic.
-* **Prerequisites:** Successful completion of `skill_context_analysis.md`, resulting in a valid `Context_Summary`.
+* **Prerequisites:** Successful completion of skill `context-analysis` step, resulting in a valid `Context_Summary`.
 
 ## 2. Core Philosophy
 

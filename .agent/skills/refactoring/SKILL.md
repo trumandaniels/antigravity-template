@@ -11,7 +11,7 @@ tags: [refactoring, optimization, clean-code]
 * **Skill Name:** Refactoring & Cleanup (Structural Optimization)
 * **Phase:** 8 / 12 (Optimization)
 * **Objective:** Restructure the verified implementation to minimize cognitive load, enforce DRY (Don't Repeat Yourself) principles, and reduce cyclomatic complexity—all without altering the system's external behavior or invalidating the test suite.
-* **Prerequisites:** Successful completion of `skill_test_verification.md` (a robust, passing test suite that guarantees falsifiability).
+* **Prerequisites:** Successful completion of skill `test-verification` step (a robust, passing test suite that guarantees falsifiability).
 
 ## 2. Core Philosophy
 

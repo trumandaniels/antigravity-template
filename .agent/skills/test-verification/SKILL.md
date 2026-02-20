@@ -11,7 +11,7 @@ tags: [testing, validation, qa]
 * **Skill Name:** Test Verification (Falsifiability & Stress Analysis)
 * **Phase:** 7 / 12 (Validation & Defense)
 * **Objective:** Execute, audit, and rigorously challenge the generated test suite to ensure it effectively guarantees the system contracts, provides meaningful coverage, and—most importantly—is actually capable of failing when the underlying implementation is compromised.
-* **Prerequisites:** Successful completion of `skill_implementation.md` (the target code) and `skill_test_generation.md` (the executable test suite).
+* **Prerequisites:** Successful completion of skill `implementation` step (the target code) and skill `test-generation` step (the executable test suite).
 
 ## 2. Core Philosophy
 
@@ -60,7 +60,7 @@ Upon completing this skill, the agent must generate a `Verification_Certificate_
 
 * **The "Evergreen" Test (False Negative Failsafe):**
 * *Trigger:* During the mutation phase (Step 3.3), the agent deliberately breaks the implementation logic, but the test suite continues to pass.
-* *Fallback:* The agent must flag the specific test as "Tautological." Execution must revert to Step 6 (`skill_test_generation.md`) with strict instructions to rewrite the test's `Assert` phase to explicitly check the mutated output variable rather than a mocked or hardcoded constant.
+* *Fallback:* The agent must flag the specific test as "Tautological." Execution must revert to Step 6 (skill `test-generation`) with strict instructions to rewrite the test's `Assert` phase to explicitly check the mutated output variable rather than a mocked or hardcoded constant.
 
 
 * **The "Tourist" Test (Execution Without Verification):**

@@ -11,7 +11,7 @@ tags: [code-review, security, diff-analysis]
 * **Skill Name:** Self-Critique & Diff Review (Holistic Quality Gate)
 * **Phase:** 10 / 12 (Validation & Defense)
 * **Objective:** Perform a rigorous, adversarial inspection of the complete changeset (the unified diff) against the original architectural blueprint. Identify security vulnerabilities, scope creep, leftover scaffolding, and logical leaps before the code is codified into documentation and version control.
-* **Prerequisites:** Successful completion of `skill_regression_check.md` (the global test suite passes green, and no systemic regressions exist). Read access to the `Design_Blueprint` from Step 2.
+* **Prerequisites:** Successful completion of skill `regression-check` step (the global test suite passes green, and no systemic regressions exist). Read access to the `Design_Blueprint` from Step 2.
 
 ## 2. Core Philosophy
 
@@ -71,9 +71,9 @@ Upon completing this skill, the agent must generate a `Review_Audit_Payload` to 
 
 * **Discovery of Unintended Scope Creep:**
 * *Trigger:* During Step 3.3, the agent realizes the diff contains modifications to files or functions outside the bounds of the original objective.
-* *Fallback:* The agent must issue a `REJECTED` verdict. Execution immediately reverts to Step 8 (`skill_refactoring.md`) with explicit instructions to `git checkout` the unrelated files and isolate the diff strictly to the required changes.
+* *Fallback:* The agent must issue a `REJECTED` verdict. Execution immediately reverts to Step 8 (skill `refactoring`) with explicit instructions to `git checkout` the unrelated files and isolate the diff strictly to the required changes.
 
 
 * **Security Vulnerability Detected:**
 * *Trigger:* The agent identifies a potential injection vector or unhandled extreme edge case in the diff that the test suite missed.
-* *Fallback:* The agent must issue a `REJECTED` verdict. Execution reverts all the way back to Step 6 (`skill_test_generation.md`). The agent must first write a failing test that exploits the discovered vulnerability, and then proceed through the loop to patch it.
+* *Fallback:* The agent must issue a `REJECTED` verdict. Execution reverts all the way back to Step 6 (skill `test-generation`). The agent must first write a failing test that exploits the discovered vulnerability, and then proceed through the loop to patch it.

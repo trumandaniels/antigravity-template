@@ -11,7 +11,7 @@ tags: [testing, compilation, sanity-check]
 * **Skill Name:** Output Verification (The "Smoke Test")
 * **Phase:** 5 / 12 (Execution & Sanity Check)
 * **Objective:** Isolate the fully linted `Verified_Code_Payload` and execute it in a controlled environment. Confirm that the script interprets, compiles, and completes a primary top-to-bottom execution path without throwing fatal runtime or initialization errors.
-* **Prerequisites:** Successful completion of `skill_static_analysis.md`, resulting in a cleanly linted and typed `Verified_Code_Payload`. Access to a secure, isolated execution environment (e.g., Docker container, WebAssembly sandbox, or restricted local subprocess).
+* **Prerequisites:** Successful completion of skill `static-analysis` step, resulting in a cleanly linted and typed `Verified_Code_Payload`. Access to a secure, isolated execution environment (e.g., Docker container, WebAssembly sandbox, or restricted local subprocess).
 
 ## 2. Core Philosophy
 

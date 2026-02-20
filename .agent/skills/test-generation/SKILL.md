@@ -11,7 +11,7 @@ tags: [testing, pytest, test-generation]
 * **Skill Name:** Test Generation (Contract Verification)
 * **Phase:** 6 / 12 (Validation & Defense)
 * **Objective:** Synthesize a comprehensive suite of unit and integration tests that prove the implementation strictly satisfies the architectural contracts, handles predicted edge cases, and fails gracefully under stress.
-* **Prerequisites:** Successful completion of `skill_output_verification.md` (code is executable) and read access to the original `skill_design_planning.md` output (the `Design_Blueprint`).
+* **Prerequisites:** Successful completion of skill `output-verification` (code is executable) and read access to the original skill `design-planning` output (the `Design_Blueprint`).
 
 ## 2. Core Philosophy
 

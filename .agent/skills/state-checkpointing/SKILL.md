@@ -11,7 +11,7 @@ tags: [git, version-control, commits]
 * **Skill Name:** State Checkpoint & Commit (Atomic Persistence)
 * **Phase:** 12 / 12 (Finalization)
 * **Objective:** Securely package the fully implemented, tested, refactored, and documented codebase into an atomic, logically sound version control checkpoint. Generate a semantic commit message that serves as a high-fidelity system ledger for both human maintainers and future agentic context retrieval.
-* **Prerequisites:** Successful completion of `skill_documentation.md` (the code has been rigorously documented and intent has been captured). Read access to the `Design_Blueprint` and the `Unified_Diff`.
+* **Prerequisites:** Successful completion of the skill `documentation` (the code has been rigorously documented and intent has been captured). Read access to the `Design_Blueprint` and the `Unified_Diff`.
 
 ## 2. Core Philosophy
 
@@ -77,4 +77,4 @@ Upon completing this skill, the agent must generate a `Checkpoint_Success_Payloa
 
 * **The Synchronization Conflict (Merge Rejection):**
 * *Trigger:* The remote repository rejects the push because the branch has advanced independently during the agent's execution loop.
-* *Fallback:* The agent must immediately halt the termination process. It must fetch the remote state, execute a rebase (preferable for clean history) or a merge, and then automatically trigger Step 9 (`skill_regression_check.md`) to verify that the newly integrated remote changes did not silently break its local implementation.
+* *Fallback:* The agent must immediately halt the termination process. The agent must fetch the remote state, execute a rebase (preferable for clean history) or a merge, and then automatically trigger Step 9 (The skill `regression-check`) to verify that the newly integrated remote changes did not silently break its local implementation.
