@@ -11,11 +11,9 @@ Traditional LLM code generation often results in brittle scripts, hallucinated d
 ---
 
 ## Key Features
-
 * **Agentic Software Engineering:** Designed specifically for agentic workflows. Gives your LLM the structural scaffolding needed to plan, execute, and validate complex Python projects.
 * **Python-Native Reliability:** Deep integration with Python best practices. The template supports virtual environment management, safe AST parsing, and proper dependency handling.
 * **Self-Healing Execution:** Equip your AI with the ability to run its own code, catch tracebacks, read linting errors, and autonomously fix bugs before presenting the final output.
-* **Extensible Architecture:** Easily plug in your preferred LLM provider, API keys, or agent framework (e.g., LangChain, LangGraph, or custom MCP servers).
 * **Production-Ready:** Stop copy-pasting generated code. This template allows agents to interact directly with the file system, manage imports, and write modular, production-ready code.
 
 ---
