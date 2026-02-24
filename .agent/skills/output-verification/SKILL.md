@@ -1,7 +1,6 @@
 ---
 name: output-verification
 description: Isolates new logic to verify compilation and execution without fatal runtime errors.
-tags: [testing, compilation, sanity-check]
 ---
 
 # Output Verification
@@ -67,3 +66,16 @@ Upon completing this skill, the agent must generate a `Runtime_Verification_Repo
 * **Silent Failures:**
 * *Trigger:* The code executes completely and exits with status code `0`, but returns nothing or fails to perform its core duty (e.g., an empty try/except block that swallows a fatal error).
 * *Fallback:* The Output Snapshot validation must catch this. If the returned payload is unexpectedly empty or `None`, the verification is marked as a failure, forcing the agent to review its error-handling mechanisms.
+## 6. Edge Cases
+
+* **Non-Deterministic Initialization:**
+  * *Trigger:* Module uses `random`, `datetime.now()`, `uuid.uuid4()`, `time.time()`, or hash-randomized structures.
+  * *Rule:* The happy-path invocation must produce a repeatable output snapshot. Inject a fixed seed (`random.seed(42)`) or mock the clock/uuid source before invocation. If output is inherently non-deterministic, verify its *shape and type* instead of its exact value.
+
+* **Import-Time Side Effects:**
+  * *Trigger:* Module contains top-level statements beyond constants, class definitions, and functions - e.g., network calls, file writes, database connections, or global state mutations executed at import.
+  * *Rule:* These fire on every `import`, not only when a function is called. Step 3.2 (Module Initialization Check) will surface them as unexpected stderr output or exceptions. Flag any such statement as an architectural defect - module-level code must be idempotent and side-effect free.
+
+* **Environment Parity:**
+  * *Trigger:* The sandbox environment differs from the declared production runtime - mismatched Python version, outdated or unpinned dependency, OS locale or filesystem encoding mismatch.
+  * *Rule:* Before executing Step 3.3, confirm the sandbox matches the lockfile-pinned dependencies and declared Python version. A smoke test that passes in the wrong environment is a false green - it masks real bugs that surface only in production.

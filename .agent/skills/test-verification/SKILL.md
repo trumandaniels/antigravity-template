@@ -1,7 +1,6 @@
 ---
 name: test-verification
 description: Executes tests against the implementation to ensure they accurately catch broken logic.
-tags: [testing, validation, qa]
 ---
 
 # Test Verification
@@ -71,3 +70,16 @@ Upon completing this skill, the agent must generate a `Verification_Certificate_
 * **State Leakage / Flakiness (The Order Dependency):**
 * *Trigger:* Tests pass when run sequentially but fail when randomized in Step 3.4, indicating shared state or improper teardown of mocks.
 * *Fallback:* The agent must inject strict `setUp` and `tearDown` methods (or heavily scoped `pytest` fixtures) to force state resets. No test is permitted to write to a shared disk or global variable without an explicit, guaranteed cleanup block.
+## 6. Edge Cases
+
+* **Micro/Standard Tier - No Test Generation Phase:**
+  * *Trigger:* Running Phase 7 on a Micro or Standard tier task where Phase 6 (test-generation) was skipped.
+  * *Rule:* The existing test suite is the **only** safety net. Coverage gaps discovered here cannot be filled mid-task without escalating to Full tier. Flag all uncovered branches touching the mutated code as tech debt, documented explicitly, requiring a follow-up Full-tier task.
+
+* **Mock Fidelity:**
+  * *Trigger:* Mocks are used that do not accurately reflect the real interface of the object they replace.
+  * *Rule:* A mock that accepts `(str)` when the real method requires `(str, int)` is a false green - the test passes but covers fabricated behavior. Validate all mocks against (1) a live instance, (2) a `Protocol` or `ABC`, or (3) a verified type signature from the codebase. Mocks that diverge from the real interface must be corrected before the test suite is certified.
+
+* **Negative Test Requirement:**
+  * *Trigger:* The test suite has no tests that exercise failure paths (invalid input, missing resource, timeout, out-of-bounds value).
+  * *Rule:* Every boundary function must have at least one test that verifies the failure path raises the correct exception or returns the correct error structure. A test suite with no expected exceptions is not a safety net - it only proves the happy path works.

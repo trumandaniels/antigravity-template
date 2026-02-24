@@ -1,7 +1,6 @@
 ---
 name: test-generation
 description: Writes comprehensive unit and integration tests covering primary paths and edge cases.
-tags: [testing, pytest, test-generation]
 ---
 
 # Test Generation

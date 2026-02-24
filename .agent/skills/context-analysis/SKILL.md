@@ -1,7 +1,6 @@
 ---
 name: context-analysis
 description: Establishes a mental model of the target environment, identifying dependencies and module architecture.
-tags: [architecture, planning, dependencies, agentic-workflow]
 ---
 
 # Context Analysis
@@ -74,3 +73,20 @@ Upon completing this skill, the agent must generate a `Context_Summary` to be pa
 * **Unresolvable Imports / Dynamic Routing:**
 * *Trigger:* Dependencies are injected dynamically at runtime or use obfuscated pathing.
 * *Fallback:* Log a warning about incomplete static analysis. Proceed with a strict "Defensive Design" posture in Step 2, assuming unknown downstream impacts.
+## 6. Edge Cases
+
+* **Dynamic / Reflective Dependencies:**
+  * *Trigger:* Code uses `importlib`, `getattr`, `eval`, `__import__`, or decorator factories that resolve dependencies at runtime.
+  * *Rule:* AST traversal cannot resolve these. Flag all such sites as **unknown blast radius**. Treat any module reached via reflection as a potential downstream consumer and apply Full-tier defensive posture.
+
+* **Infrastructure Coupling:**
+  * *Trigger:* Behavior depends on environment variables, config files, secrets vaults, or IaC manifests invisible to static import analysis.
+  * *Rule:* Scan for `os.environ`, `os.getenv`, config loaders, and secrets clients. List all such implicit dependencies in the `Context_Summary` as external constraints.
+
+* **External Service Contracts:**
+  * *Trigger:* The anchor node calls a REST endpoint, gRPC service, message queue, or third-party SDK with no type stubs.
+  * *Rule:* Document the external interface version or schema in the `Context_Summary`; flag for manual contract validation before shipping.
+
+* **Mutable Global State:**
+  * *Trigger:* Module-level singletons, caches, or registries (e.g., `_registry = {}`) shared across all callers and test runs.
+  * *Rule:* Flag as **extended blast radius**. A change touching shared mutable state must be treated as Standard or Full tier regardless of apparent line count.

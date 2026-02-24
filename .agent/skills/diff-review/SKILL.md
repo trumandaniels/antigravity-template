@@ -1,7 +1,6 @@
 ---
 name: diff-review
 description: Performs a holistic code explanation and review of the complete diff, checking for vulnerabilities and logical leaps.
-tags: [code-review, security, diff-analysis]
 ---
 
 # Diff Review

@@ -1,7 +1,6 @@
 ---
 name: state-checkpoint
 description: Packages finalized changes into atomic commits with descriptive, context-rich commit messages.
-tags: [git, version-control, commits]
 ---
 
 # State Checkpointing

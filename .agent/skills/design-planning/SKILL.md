@@ -1,7 +1,6 @@
 ---
 name: design-planning
 description: Drafts architectural blueprints, data structures, and algorithms prior to implementation.
-tags: [design, architecture, algorithms]
 ---
 
 # Design Planning
@@ -73,3 +72,20 @@ Upon completing this skill, the agent must generate a `Design_Blueprint` to be p
 * **State Mutation Risks:**
 * *Trigger:* The design proposes modifying global state or modifying input variables in place rather than returning new objects.
 * *Fallback:* Enforce immutability protocols. Require the design to utilize pure functions that return new state copies.
+## 6. Edge Cases
+
+* **Backwards Compatibility Classification:**
+  * *Trigger:* Any change to a function signature, class interface, or data schema.
+  * *Rule:* Every design must explicitly classify the change as one of:
+    - **Additive** - new symbol added; no existing callers affected; safe to ship immediately.
+    - **Non-breaking** - existing signature unchanged, behavior extended; safe with monitoring.
+    - **Breaking** - signature or contract changes; requires a migration or deprecation plan in this blueprint before implementation begins.
+  * Failing to classify defaults to treating the change as **Breaking**.
+
+* **Concurrency Model Explicitness:**
+  * *Trigger:* Module runs in a threaded, multiprocessed, or async context, or change converts sync to async (or vice versa).
+  * *Rule:* The `Design_Blueprint` must document: (1) whether the function is safe to call concurrently, (2) which shared state it reads or mutates, and (3) which synchronization primitives guard that state. Race conditions are invisible to synchronous unit tests - they must be designed out, not tested out.
+
+* **Data Migration Requirement:**
+  * *Trigger:* Change alters a persisted schema - database columns, serialized file format, API response shape, or message queue envelope.
+  * *Rule:* A migration script or versioning strategy must be scoped within this design phase. If the migration cannot be completed atomically, the blueprint must define a backward-compatible transition state.

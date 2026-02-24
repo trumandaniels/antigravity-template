@@ -1,7 +1,6 @@
 ---
 name: refactoring
 description: Optimizes code for readability and DRY principles without altering core behavior.
-tags: [refactoring, optimization, clean-code]
 ---
 
 # Refactoring
@@ -76,3 +75,16 @@ Upon completing this skill, the agent must generate a `Refactored_State_Payload`
 * **The Broken Contract (Regression Injection):**
 * *Trigger:* The agent alters a variable name or data structure that is implicitly expected by an external, un-mocked dependency, causing a silent failure that the isolated unit tests miss.
 * *Fallback:* This highlights a failure in Step 6's test coverage. The agent must revert the change, write a new failing test that captures this previously hidden contract, and only then re-attempt the refactor.
+## 6. Edge Cases
+
+* **Rule of Three (Abstraction Threshold):**
+  * *Trigger:* The agent extracts a reusable abstraction (helper function, base class, utility) that is only used in one or two places.
+  * *Rule:* Do not create a new abstraction until the pattern appears in **at least three distinct call sites**. Premature abstraction creates indirection debt - future agents must follow chains of single-use helpers to understand simple logic. Two similar-looking code blocks are a coincidence; three are a pattern.
+
+* **Hot-Path Performance Regression:**
+  * *Trigger:* The function being refactored is called frequently (inside a loop, on every request, per-frame, per-packet) or is in a latency-sensitive path.
+  * *Rule:* If the function is called >1,000 times per execution or has documented latency requirements, benchmark before and after the refactor. Reject any refactoring change that degrades wall-clock performance by more than 10% without an explicit trade-off justification.
+
+* **Implicit Interface Contracts via Duck Typing:**
+  * *Trigger:* A method is renamed or its signature changed during refactoring, while callers rely on structural typing (duck typing or `Protocol` matching) rather than explicit inheritance.
+  * *Rule:* The broken contract will not surface in static analysis if the caller uses `hasattr` or `getattr` to invoke the method. After any rename or signature change, search the full codebase for string-literal references to the old name and `hasattr`/`getattr` callsites. This is a Micro-tier change with Standard-tier blast radius.

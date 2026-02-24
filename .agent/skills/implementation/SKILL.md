@@ -1,7 +1,6 @@
 ---
 name: implementation
 description: Translates approved designs into clean, idiomatic code with straightforward logic.
-tags: [coding, python, implementation]
 ---
 
 # Implementation
@@ -71,3 +70,24 @@ Upon completing this skill, the agent must generate a `Code_Payload` to be passe
 * **God Object Creation:**
 * *Trigger:* The agent dumps all logic into a single, massive function or class.
 * *Fallback:* Introduce a strict cyclomatic complexity or line-count limit. Force the agent to refactor the logic into smaller, discrete helper functions before proceeding to Step 4.
+## 6. Edge Cases
+
+* **Mutable Default Arguments:**
+  * *Trigger:* A function defined with a mutable default (e.g., `def f(items=[])`).
+  * *Rule:* The default is created **once** at definition time and mutated across all calls. Always use `None` as sentinel and initialize inside the body: `if items is None: items = []`. Static analysis tools frequently miss this.
+
+* **Generator Single-Use Exhaustion:**
+  * *Trigger:* A generator or iterator passed to more than one consumer, or stored and iterated twice.
+  * *Rule:* Generators are stateful and exhausted after one full pass. Materialize into a `list` at the point of creation if multiple consumers are needed. Document single-use iterators in docstrings.
+
+* **Identity vs. Equality (`is` vs. `==`):**
+  * *Trigger:* `is` used to compare strings, integers outside [-5, 256], or any non-singleton value.
+  * *Rule:* `is` checks object identity, not value equality. It produces correct results for small integers and interned strings due to CPython internals, but **silently fails** on PyPy, large values, or across process boundaries. Use `==` for all value comparisons; reserve `is` strictly for `None`, `True`, and `False`.
+
+* **Resource Leaks:**
+  * *Trigger:* File handles, database connections, sockets, subprocess pipes, or locks opened without a guaranteed close path.
+  * *Rule:* All resources must be managed via context managers (`with` statement). Flag any `open()`, `connect()`, or `subprocess.Popen()` not inside a `with` block as a defect.
+
+* **Bare Exception Handlers:**
+  * *Trigger:* Code contains `except:`, `except Exception:`, or `except Exception: pass`.
+  * *Rule:* These silently swallow `KeyboardInterrupt`, `SystemExit`, and genuine bugs. Always catch the most specific exception type. If suppression is required, log the full traceback before discarding the exception.

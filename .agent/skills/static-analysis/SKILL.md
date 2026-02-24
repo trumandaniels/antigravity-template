@@ -1,7 +1,6 @@
 ---
 name: static-analysis
 description: Runs configured linters and strict type checkers to catch syntax and stylistic violations.
-tags: [linting, type-checking, quality-assurance]
 ---
 
 # Static Analysis
@@ -68,3 +67,16 @@ Upon completing this skill, the agent must generate a `Verified_Code_Payload` to
 * **Hallucinated Library Types:**
 * *Trigger:* The type checker fails because the agent relies on an external library that lacks type stubs, resulting in `Any` types spreading throughout the codebase.
 * *Fallback:* Mandate the isolation of untyped external boundaries. Require the agent to write explicit wrapper functions that enforce types at the boundary layer before the data enters the core logic.
+## 6. Edge Cases
+
+* **Type Narrowing vs. Widening:**
+  * *Trigger:* A type annotation changes at a function boundary.
+  * *Rule:* **Widening** (`str` to `Optional[str]`) is backwards-compatible. **Narrowing** (`Optional[str]` to `str`) is a breaking change - it removes the None branch and crashes callers that relied on it. The type checker flags call sites but cannot catch narrowing violations flowing through dynamic dispatch. Treat any narrowing as **Breaking** per the design-planning classification.
+
+* **Suppression Comment Policy:**
+  * *Trigger:* The agent writes `# type: ignore`, `# noqa`, or `@ts-ignore` to silence a tool warning.
+  * *Rule:* Suppression is permitted only when the comment includes an inline reason: `# type: ignore[assignment] - third-party lib lacks stubs`. Blanket suppressions without a reason are treated as unresolved type errors. Zero exceptions.
+
+* **Dynamic Pattern Blind Spots:**
+  * *Trigger:* Code uses `getattr`, TypeVar-bound generics outside constraints, Protocol implementations via `__getattr__`, or runtime class construction (`type()`).
+  * *Rule:* mypy and pyright cannot resolve types flowing through these patterns. Do not suppress the resulting Any propagation warnings - annotate the verified boundary with: `# dynamic: unresolvable - validated manually`. This preserves observability without dishonestly silencing the tool.

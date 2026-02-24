@@ -1,7 +1,6 @@
 ---
 name: documentation
 description: Updates docstrings, inline comments, and READMEs to explain the rationale behind code decisions.
-tags: [documentation, technical-writing, comments]
 ---
 
 # Documentation
